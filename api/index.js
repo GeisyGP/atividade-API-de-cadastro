@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const cityController = require('./controllers/cityController')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -14,9 +15,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/API-atividade', {
   console.log(err)
 })
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello world' })
-})
+app.use('/city', cityController)
 
 const port = 1818
 app.listen(port, () => {
