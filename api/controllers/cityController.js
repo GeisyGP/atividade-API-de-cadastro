@@ -27,4 +27,36 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.get('/name/:name', async (req, res) => {
+  const name = req.params.name
+
+  try {
+    const cities = await City.findOne({ name })
+    if (cities) {
+      res.json(cities)
+    } else {
+      res.status(404).json({ error: 'Cidade não encontrada' })
+    }
+  } catch (err) {
+    console.log(err)
+    res.sendStatus(500)
+  }
+})
+
+router.get('/state/:state', async (req, res) => {
+  const state = req.params.state
+
+  try {
+    const cities = await City.find({ state })
+    if (cities.length > 0) {
+      res.json(cities)
+    } else {
+      res.status(404).json({ error: 'Estado não encontrado' })
+    }
+  } catch (err) {
+    console.log(err)
+    res.sendStatus(500)
+  }
+})
+
 module.exports = router
