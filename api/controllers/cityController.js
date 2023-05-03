@@ -11,14 +11,13 @@ router.post('/', async (req, res) => {
     return
   }
   try {
-    const city = await City.findOne({ name: req.body.name })
+    let newCity = await City.find({ name: req.body.name })
 
-    if (city !== undefined) {
-      res.statusCode = 400
-      res.json({ error: 'Cidade já cadastrada' })
+    if (newCity.length > 0) {
+      res.status(400).json({ error: 'Cidade já cadastrada' })
       return
     }
-    const newCity = new City({ name: req.body.name, state: req.body.state })
+    newCity = new City({ name: req.body.name, state: req.body.state })
     await newCity.save()
     res.status(201).json({ name: req.body.name, state: req.body.state })
   } catch (err) {
