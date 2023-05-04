@@ -70,4 +70,38 @@ router.get('/id/:id', async (req, res) => {
   }
 })
 
+router.delete('/:id', async (req, res) => {
+  const id = req.params.id
+
+  try {
+    const clientResult = await Client.findOne({ _id: id })
+    if (clientResult) {
+      await Client.deleteOne({ _id: id })
+      return res.sendStatus(204)
+    } else {
+      return res.status(404).json({ error: 'Cliente não encontrado' })
+    }
+  } catch (err) {
+    console.log(err)
+    return res.sendStatus(500)
+  }
+})
+
+router.put('/:id', async (req, res) => {
+  const id = req.params.id
+  const clientResult = await Client.findOne({ _id: id })
+
+  if (!clientResult) {
+    return res.status(404).json({ error: 'Cliente não encontrado' })
+  }
+
+  try {
+    const clientUpdate = await Client.findByIdAndUpdate(id, { name: req.body.name }, { new: true })
+    return res.status(200).json(clientUpdate)
+  } catch (err) {
+    console.log(err)
+    return res.sendStatus(500)
+  }
+})
+
 module.exports = router
