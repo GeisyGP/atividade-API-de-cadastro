@@ -7,15 +7,13 @@ const City = mongoose.model('City', city)
 
 router.post('/', async (req, res) => {
   if (req.body.name === undefined || req.body.state === undefined) {
-    res.sendStatus(400)
-    return
+    return res.sendStatus(400)
   }
   try {
     let newCity = await City.find({ name: req.body.name })
 
     if (newCity.length > 0) {
-      res.status(400).json({ error: 'Cidade já cadastrada' })
-      return
+      return res.status(400).json({ error: 'Cidade já cadastrada' })
     }
     newCity = new City({ name: req.body.name, state: req.body.state })
     await newCity.save()
@@ -32,9 +30,9 @@ router.get('/name/:name', async (req, res) => {
   try {
     const cities = await City.findOne({ name })
     if (cities) {
-      res.json(cities)
+      return res.json(cities)
     } else {
-      res.status(404).json({ error: 'Cidade não encontrada' })
+      return res.status(404).json({ error: 'Cidade não encontrada' })
     }
   } catch (err) {
     console.log(err)
@@ -48,9 +46,9 @@ router.get('/state/:state', async (req, res) => {
   try {
     const cities = await City.find({ state })
     if (cities.length > 0) {
-      res.json(cities)
+      return res.json(cities)
     } else {
-      res.status(404).json({ error: 'Estado não encontrado' })
+      return res.status(404).json({ error: 'Estado não encontrado' })
     }
   } catch (err) {
     console.log(err)

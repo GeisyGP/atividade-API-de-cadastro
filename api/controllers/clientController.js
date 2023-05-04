@@ -13,14 +13,13 @@ router.post('/', async (req, res) => {
     !req.body.birth ||
     !req.body.age ||
     !req.body.currentCity) {
-    res.sendStatus(400)
-    return
+    return res.sendStatus(400)
   }
 
   const cityName = req.body.currentCity
   const cityRef = await City.findOne({ name: cityName })
   if (!cityRef) {
-    return res.status(400).json({ error: 'Cidade não encontrada. Cadastre-a em /city' })
+    return res.status(400).json({ error: 'Cidade não encontrada' })
   }
 
   try {
@@ -29,7 +28,7 @@ router.post('/', async (req, res) => {
       gender: req.body.gender,
       birth: req.body.birth,
       age: req.body.age,
-      currentCity: city._id
+      currentCity: cityRef._id
     })
     await newClient.save()
     res.status(201).json(newClient)
