@@ -38,4 +38,36 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.get('/name/:name', async (req, res) => {
+  const name = req.params.name
+
+  try {
+    const clientResult = await Client.findOne({ name }).populate('currentCity')
+    if (clientResult) {
+      return res.json(clientResult)
+    } else {
+      return res.status(404).json({ error: 'Cliente não encontrado' })
+    }
+  } catch (err) {
+    console.log(err)
+    res.sendStatus(500)
+  }
+})
+
+router.get('/id/:id', async (req, res) => {
+  const id = req.params.id
+
+  try {
+    const clientResult = await Client.findOne({ _id: id }).populate('currentCity')
+    if (clientResult) {
+      return res.json(clientResult)
+    } else {
+      return res.status(404).json({ error: 'Cliente não encontrado' })
+    }
+  } catch (err) {
+    console.log(err)
+    res.sendStatus(500)
+  }
+})
+
 module.exports = router
