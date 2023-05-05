@@ -16,7 +16,10 @@ router.post('/', async (req, res) => {
     return res.sendStatus(400)
   }
 
-  const cityName = req.body.currentCity
+  const name = req.body.name.toUpperCase()
+  const gender = req.body.gender.toUpperCase()
+  const cityName = req.body.currentCity.toUpperCase()
+
   const cityRef = await City.findOne({ name: cityName })
   if (!cityRef) {
     return res.status(400).json({ error: 'Cidade não encontrada' })
@@ -24,8 +27,8 @@ router.post('/', async (req, res) => {
 
   try {
     const newClient = new Client({
-      name: req.body.name,
-      gender: req.body.gender,
+      name,
+      gender,
       birth: req.body.birth,
       age: req.body.age,
       currentCity: cityRef._id
@@ -39,7 +42,7 @@ router.post('/', async (req, res) => {
 })
 
 router.get('/name/:name', async (req, res) => {
-  const name = req.params.name
+  const name = req.params.name.toUpperCase()
 
   try {
     const clientResult = await Client.findOne({ name }).populate('currentCity')
@@ -95,8 +98,10 @@ router.put('/:id', async (req, res) => {
     return res.status(404).json({ error: 'Cliente não encontrado' })
   }
 
+  const name = req.body.name.toUpperCase()
+
   try {
-    const clientUpdate = await Client.findByIdAndUpdate(id, { name: req.body.name }, { new: true })
+    const clientUpdate = await Client.findByIdAndUpdate(id, { name }, { new: true })
     return res.status(200).json(clientUpdate)
   } catch (err) {
     console.log(err)
